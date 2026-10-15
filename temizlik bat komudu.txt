@@ -1,0 +1,163 @@
+@echo off
+:: Yönetici olarak çalışıp çalışmadığını kontrol et
+net session >nul 2>&1
+if %errorLevel% == 0 (
+    echo Yönetici olarak çalıştırıldı.
+) else (
+    echo Yönetici izinleri gerekiyor. Lütfen onay verin...
+    powershell -Command "Start-Process '%~0' -Verb RunAs"
+    exit /B
+)
+
+:: Yönetici olarak çalıştığında yapılacak işlemler buradan itibaren başlar
+@echo off
+COLOR A
+
+echo Bilgisayar temizliği ve bakımı başlatılıyor...
+echo.
+
+:: (Diğer komutlar buradan itibaren devam edecek)
+
+@echo off
+echo Bilgisayar temizliği ve bakımı baslatiliyor...
+echo.
+
+:: Geçici dosyalar temizleniyor
+echo Geçici dosyalar temizleniyor...
+del /s /q %temp%\*.* 
+rd /s /q %temp%
+mkdir %temp%
+del /f /s /q %systemdrive%\*.tmp
+del /f /s /q %systemdrive%\*._mp
+del /f /s /q %systemdrive%\*.log
+del /f /s /q %systemdrive%\*.gid
+del /f /s /q %systemdrive%\*.chk
+del /f /s /q %systemdrive%\*.old
+del /f /s /q %windir%\*.bak
+del /f /s /q %windir%\prefetch\*.*
+rd /s /q %windir%\temp & md %windir%\temp
+del /f /q %userprofile%\cookies\*.*
+del /f /q %userprofile%\recent\*.*
+del /f /s /q "%userprofile%\Local Settings\Temporary Internet Files\*.*"
+del /f /s /q "%userprofile%\Local Settings\Temp\*.*"
+del /f /s /q "%userprofile%\recent\*.*"
+
+echo Geçici dosyalar temizlendi.
+echo.
+
+:: Çöp kutusu temizleniyor.
+echo Çöp kutusu temizleniyor...
+rd /s /q %systemdrive%\$Recycle.Bin
+echo Çöp kutusu başarıyla temizlendi.
+pause
+
+:: DNS önbelleği temizleniyor
+echo DNS önbelleği temizleniyor...
+ipconfig /flushdns
+echo DNS önbelleği temizlendi.
+echo.
+
+:: Disk Temizleme Aracı çalıştırılıyor
+echo Disk Temizleme Aracı çalıştırılıyor...
+cleanmgr /sagerun:1
+echo Disk Temizleme Aracı tamamlandı.
+echo.
+
+:: Disk birleştirme islemi basliyor
+@echo offecho Disk birleştirme islemi basliyor...
+defrag C: /H /U /V
+echo Isleminiz tamamlandi.
+echo.
+
+:: Windows Güncelleme dosyaları temizleniyor
+echo Windows Güncelleme dosyaları temizleniyor...
+net stop wuauserv
+del /f /s /q %windir%\SoftwareDistribution\Download\*.*
+net start wuauserv
+echo Windows Güncelleme dosyaları temizlendi.
+echo.
+
+:: Eski sistem geri yükleme noktaları siliniyor
+echo Eski sistem geri yükleme noktaları siliniyor...
+vssadmin delete shadows /for=c: /oldest
+echo Eski sistem geri yükleme noktaları silindi.
+echo.
+
+:: Önbellek dosyaları temizleniyor
+echo Önbellek dosyaları temizleniyor...
+del /s /f /q C:\Windows\Prefetch\*.*
+rd /s /q C:\Windows\Prefetch
+echo Önbellek dosyaları temizlendi.
+echo.
+
+:: Eski Windows dosyaları temizleniyor
+echo Eski Windows dosyaları temizleniyor...
+del /f /s /q C:\Windows.old\*.* 
+rd /s /q C:\Windows.old
+echo Eski Windows dosyaları temizlendi.
+echo.
+
+:: Internet tarayıcı geçmişi temizleniyor
+echo Internet tarayıcı geçmişi temizleniyor...
+RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 255
+echo Internet tarayıcı geçmişi temizlendi.
+echo.
+
+:: Gereksiz hizmetler kapatılıyor
+echo Gereksiz hizmetler kapatılıyor...
+net stop wsearch
+net stop DiagTrack
+net stop sysmain
+echo Gereksiz hizmetler kapatıldı.
+echo.
+
+:: Windows hata bildirimleri temizleniyor
+echo Windows hata bildirimleri temizleniyor...
+del /s /f /q C:\ProgramData\Microsoft\Windows\WER\*
+echo Windows hata bildirimleri temizlendi.
+echo.
+
+:: Prefetch dosyaları temizleniyor
+echo Prefetch dosyaları temizleniyor...
+del /s /f /q C:\Windows\Prefetch\*
+echo Prefetch dosyaları temizlendi.
+echo.
+
+:: Thumbnail önbelleği temizleniyor
+echo Thumbnail önbelleği temizleniyor...
+del /s /f /q %LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db
+echo Thumbnail önbelleği temizlendi.
+echo.
+
+:: Windows Update klasörü temizleniyor
+echo Windows Update klasörü temizleniyor...
+net stop wuauserv
+ren C:\Windows\SoftwareDistribution SoftwareDistribution.old
+net start wuauserv
+echo Windows Update klasörü temizlendi.
+echo.
+
+:: DirectX Shader Cache temizleniyor
+echo DirectX Shader Cache temizleniyor...
+del /s /f /q C:\Users\%username%\AppData\Local\D3DSCache\*
+echo DirectX Shader Cache temizlendi.
+echo.
+
+:: Sistem olay günlükleri temizleniyor
+echo Sistem olay günlükleri temizleniyor...
+wevtutil cl Application
+wevtutil cl System
+wevtutil cl Security
+echo Sistem olay günlükleri temizlendi.
+echo.
+
+:: Tüm geçici klasörler temizleniyor
+echo Tüm geçici klasörler temizleniyor...
+del /s /f /q %SystemRoot%\Temp\*
+del /s /f /q %USERPROFILE%\AppData\Local\Temp\*
+echo Tüm geçici klasörler temizlendi.
+echo.
+
+
+echo Temizlik ve bakım işlemi tamamlandı! >---BU BİR VEYSEL EMİR OGUZ HAYRATIDIR---<
+pause
