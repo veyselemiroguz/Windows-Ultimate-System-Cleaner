@@ -18,6 +18,6 @@ Script, Windows sistem klasörlerine müdahale ettiği için **Yönetici İzni**
 ## 🚀 Kullanım
 1. Depodaki `.txt` dosyasını bilgisayarınıza indirin.
 2. Dosyayı `.bat` dosyasına çevirin
-3. Dosyaya çift tıklayarak çalıştırın.
-4. Açılan siyah ekranda şifresini bulmak istediğiniz `.rar` dosyasının adını (örneğin: `dosya.rar`) ve bulunduğu klasör yolunu (örneğin: `C:\Users\Admin\Desktop`) girin.
-5. Program doğru şifreyi bulana kadar tüm olasılıkları çok hızlı bir şekilde otomatik deneyecektir.
+3. Dosyaya **Sağ Tıklayın** ve **"Yönetici Olarak Çalıştır"** seçeneğine tıklayın.
+4. Arkanıza yaslanın ve scriptin yeşil ekranda adım adım sistemi temizlemesini izleyin.
+5. İşlem bitince herhangi bir tuşa basarak ekranı kapatabilirsiniz.
